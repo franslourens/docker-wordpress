@@ -1,4 +1,4 @@
-FROM wordpress:php7.3-fpm
+FROM wordpress:php7.4-fpm
 
 COPY php.ini /usr/local/etc/php
 COPY php.conf /usr/local/etc/php-fpm.d/www.conf
