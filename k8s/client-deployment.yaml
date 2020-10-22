@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: client-deployment
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      component: web
+  template: 
+    metadata: 
+      labels: 
+        component: web
+    spec:
+      volumes:
+        - name: code
+          emptyDir: {} 
+        - name: sock
+          emptyDir: {}
+      containers: 
+        - 
+          image: franslourens/nginx-wordpress
+          name: nginx
+          imagePullPolicy: Always
+          ports: 
+            - 
+              containerPort: 80
+          volumeMounts:
+            - 
+              name: code
+              mountPath: /var/www/html
+            - 
+              name: sock
+              mountPath: /socket
+        - 
+          image: franslourens/php-wordpress
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql-cluster-ip-service
+            - name: WORDPRESS_DB_USER
+              value: "root"
+            - name: WORDPRESS_DB_NAME
+              value: "wordpress"
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysqlpassword
+                  key: mysqlpassword
+          imagePullPolicy: Always
+          name: fpm
+          volumeMounts:
+            - 
+              name: code
+              mountPath: /var/www/html
+            - 
+              name: sock
+              mountPath: /socket

@@ -1,0 +1,9 @@
+FROM nginx
+
+RUN addgroup --gid 2000 --system wordpress
+RUN adduser --uid 2000 --system --disabled-login --disabled-password --gid 2000 wordpress
+RUN addgroup nginx wordpress
+
+COPY wordpress.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80

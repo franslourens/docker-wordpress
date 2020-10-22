@@ -1,0 +1,53 @@
+version: '3.4'
+
+services:
+  nginx:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    working_dir: "/var/www/html"
+    volumes:
+      - wordpress:/var/www/html
+      - socket:/socket
+    ports:
+      - "8090:80"
+    restart: always
+    depends_on:
+        - wordpress
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    restart: always
+    links:
+        - memcache-cluster-ip-service
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    volumes:
+      - wordpress:/var/www/html
+      - socket:/socket
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+  memcache-cluster-ip-service:
+    container_name: memcache-cluster-ip-service
+    image: memcached:latest
+    command: ["-m", "512m"]
+    restart: always
+    ports:
+        - "11211:11211"
+volumes:
+  wordpress:
+  db:
+  socket:
