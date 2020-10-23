@@ -19,14 +19,3 @@ RUN docker-php-ext-enable memcache memcached
 
 RUN addgroup --gid 2000 --system wordpress
 RUN adduser --uid 2000 --system --disabled-login --disabled-password --gid 2000 wordpress
-
-
-WORKDIR /usr/src/app/
-COPY wordpress/ /usr/src/app/
-
-RUN chmod +x install.sh && \
-    sh install.sh && \
-    rm -rf \
-    install.sh \
-    plugins.txt \
-    themes.txt
