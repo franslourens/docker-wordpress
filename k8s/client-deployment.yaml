@@ -17,31 +17,6 @@ spec:
           emptyDir: {} 
         - name: sock
           emptyDir: {}
-      initContainers:
-        - args:
-            - /bin/bash
-            - -c
-            - 
-          image: franslourens/php-wordpress
-          name: wordpress
-          env:
-            - name: WORDPRESS_DB_HOST
-              value: mysql-cluster-ip-service
-            - name: WORDPRESS_DB_USER
-              value: "root"
-            - name: WORDPRESS_DB_NAME
-              value: "wordpress"
-            - name: WORDPRESS_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysqlpassword
-                  key: mysqlpassword
-          volumeMounts:
-            - 
-              name: code
-              mountPath: /var/www/html
-            - name: config-volume
-              mountPath: /etc/config
       containers: 
         - 
           image: franslourens/nginx-wordpress
