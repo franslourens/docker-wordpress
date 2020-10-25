@@ -10,8 +10,8 @@ docker push franslourens/nginx-wordpress:$SHA
 kubectl apply -f k8s/database-persistent-volume-claim.yaml
 kubectl apply -f k8s/mysql-cluster-ip-service.yaml
 kubectl apply -f k8s/mysql-deployment.yaml
-kubectl apply -f k8s/client-cluster-ip-service.yaml
-kubectl apply -f k8s/client-deployment.yaml
+kubectl apply -f k8s/wordpress-cluster-ip-service.yaml
+kubectl apply -f k8s/wordpress-deployment.yaml
 kubectl apply -f k8s/memcache-cluster-ip-service.yaml
 kubectl apply -f k8s/memcache-deployment.yaml
 
